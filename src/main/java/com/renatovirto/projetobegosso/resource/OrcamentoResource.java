@@ -1,16 +1,17 @@
 package com.renatovirto.projetobegosso.resource;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,10 +39,7 @@ public class OrcamentoResource {
 	
 	@GetMapping("/{id}")
 	public Orcamento buscarPeloId(@PathVariable Long id) throws ObjectNotFoundException {
-		Optional<Orcamento> orcamento = orcamentoRepository.findById(id);
-		
-		return orcamento.orElseThrow(() -> new ObjectNotFoundException(
-				"Orcamento não encontrado! Id: " + id + ", Tipo: " + ObjectNotFoundException.class.getName()));
+		return orcamentoService.buscar(id);
 	}
 	
 	@PostMapping
@@ -50,6 +48,18 @@ public class OrcamentoResource {
 				orcamentoService.calcularTotalProduto(orcamento));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(orcamentoSalvo);
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Orcamento> atualizar(@Valid @RequestBody Orcamento orcamento, @PathVariable Long id) throws ObjectNotFoundException {
+		Orcamento orcamentoSalvo = orcamentoService.atualizarOrcamento(orcamento, id);
+		
+		return ResponseEntity.ok().body(orcamentoSalvo);
+	}
+	
+	@DeleteMapping("/{id}")
+	public void excluir(@PathVariable Long id) {
+		orcamentoRepository.deleteById(id);
 	}
 	
 }
