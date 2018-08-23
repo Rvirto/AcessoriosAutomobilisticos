@@ -20,6 +20,8 @@ public class Funcionario {
 	private String numero;
 	private String bairro;
 	private String cidade;
+	private String rg;
+	private String cpf;
 	
 	@Size(max=2, min=2)
 	private String uf;
@@ -64,6 +66,18 @@ public class Funcionario {
 	}
 	public String getNome() {
 		return nome;
+	}
+	public String getRg() {
+		return rg;
+	}
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 	public void setNome(String nome) {
 		this.nome = nome;

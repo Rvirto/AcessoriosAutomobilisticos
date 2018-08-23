@@ -4,10 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -23,6 +20,9 @@ public class Cliente {
 	private String numero;
 	private String bairro;
 	private String cidade;
+	private String rg;
+	private String cpf;
+	
 	@Size(max=2, min=2)
 	private String uf;
 	
@@ -32,11 +32,6 @@ public class Cliente {
 	@Size(max=14, min=11)
 	private String telefone;
 	private String email;
-	
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name="id_carro")
-	private Carro carro;
 	
 	
 	@Override
@@ -67,6 +62,19 @@ public class Cliente {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getRg() {
+		return rg;
+	}
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 	public String getNome() {
 		return nome;
@@ -122,11 +130,4 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Carro getCarro() {
-		return carro;
-	}
-	public void setCarro(Carro carro) {
-		this.carro = carro;
-	}
-	
 }

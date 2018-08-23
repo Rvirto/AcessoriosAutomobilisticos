@@ -26,6 +26,7 @@ public class ClienteService {
 	
 	public Cliente atualizarCliente(Cliente cliente, Long id) throws ObjectNotFoundException {
 		Cliente clienteBuscado = buscarPeloId(id);
+		System.out.println(clienteBuscado.getNome());
 		BeanUtils.copyProperties(cliente, clienteBuscado, "id");
 		return clienteRepository.save(clienteBuscado); 
 	}

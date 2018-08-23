@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +34,19 @@ public class FornecedorResource {
 	@Autowired
 	private FornecedorService fornecedorService;
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping
 	public List<Fornecedor> listar() {
 		return fornecedorRepository.findAll();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/{id}")
 	public Fornecedor buscarPorId(@PathVariable Long id) throws ObjectNotFoundException {
 		return fornecedorService.buscar(id);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping
 	public ResponseEntity<Fornecedor> adicionar(@Valid @RequestBody Fornecedor fornecedor) {
 		Fornecedor fornecedorSalvo = fornecedorRepository.save(fornecedor);
@@ -50,6 +54,7 @@ public class FornecedorResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(fornecedorSalvo);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/{id}")
 	public ResponseEntity<Fornecedor> atualizar(@Valid @RequestBody Fornecedor fornecedor, @PathVariable Long id) throws ObjectNotFoundException {
 		Fornecedor fornecedorSalvo = fornecedorService.atualizarFornecedor(fornecedor, id);
@@ -57,6 +62,7 @@ public class FornecedorResource {
 		return ResponseEntity.ok().body(fornecedorSalvo);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long id) {
