@@ -26,7 +26,7 @@ public class Cliente {
 	@Size(max=2, min=2)
 	private String uf;
 	
-	@Size(max=9, min=8)
+	@Size(max=10, min=8)
 	private String cep;
 	
 	@Size(max=14, min=11)

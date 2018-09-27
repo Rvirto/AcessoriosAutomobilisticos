@@ -15,55 +15,54 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.renatovirto.projetobegosso.model.Carrinho;
 import com.renatovirto.projetobegosso.model.Produto;
-import com.renatovirto.projetobegosso.repository.ProdutoRepository;
-import com.renatovirto.projetobegosso.service.ProdutoService;
+import com.renatovirto.projetobegosso.repository.CarrinhoRepository;
+import com.renatovirto.projetobegosso.service.CarrinhoService;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
 @RestController
-@RequestMapping("/produtos")
-public class ProdutoResource {
+@RequestMapping("/carrinho")
+public class CarrinhoResource {
 
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private CarrinhoRepository carrinhoRepository;
 	
 	@Autowired
-	private ProdutoService produtoService;
-	
+	private CarrinhoService carrinhoService;
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping
-	public List<Produto> listar() {
-		return produtoRepository.findAll();
+	public List<Carrinho> listarCarrinho() {
+		return carrinhoRepository.findAll();
 	}
-	
-	@CrossOrigin(origins = "http://localhost:4200")
-	@GetMapping("/{id}")
-	public Produto buscarPorId(@PathVariable Long id) throws ObjectNotFoundException {
-		return produtoService.buscar(id);
-	}
-	
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping
-	public ResponseEntity<Produto> adicionar(@Valid @RequestBody Produto produto) {
-		Produto produtoSalvo = produtoRepository.save(produto);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
+	public ResponseEntity<Carrinho> adicionar(@Valid @RequestBody Produto produto) {
+		carrinhoService.adicionarProduto(produto);
+		return ResponseEntity.ok().build();
 	}
-	
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/{id}")
-	public ResponseEntity<Produto> atualizar(@Valid @RequestBody Produto produto, @PathVariable Long id) throws ObjectNotFoundException {
-		Produto produtoSalvo = produtoService.atualizarProduto(produto, id);
-		
-		return ResponseEntity.ok().body(produtoSalvo);
+	public ResponseEntity<Carrinho> atualizar(@Valid @RequestBody Carrinho carrinho, @PathVariable Long id)
+			throws ObjectNotFoundException {
+		Carrinho carrinhoAtualizado = carrinhoService.atualizarCarrinho(carrinho, id);
+
+		return ResponseEntity.ok().body(carrinhoAtualizado);
 	}
-	
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
-	public void deletar(@PathVariable Long id) {
-		produtoRepository.deleteById(id);
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void excluir(@PathVariable Long id) {
+		carrinhoRepository.deleteById(id);
+
 	}
+
 }

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,16 +33,19 @@ public class ServicoResource {
 	@Autowired
 	private ServicoService servicoService;
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping
 	public List<Servico> listar() {
 		return servicoRepository.findAll();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/{id}")
 	public Servico buscarPeloId(@PathVariable Long id) throws ObjectNotFoundException {
 		return servicoService.buscar(id);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping
 	public ResponseEntity<Servico> adicionar(@Valid @RequestBody Servico servico) {
 		
@@ -50,6 +54,7 @@ public class ServicoResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(servicoSalvo);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/{id}")
 	public ResponseEntity<Servico> atualizar(@Valid @RequestBody Servico servico, @PathVariable Long id) throws ObjectNotFoundException {
 		Servico servicoSalvo = servicoService.atualizarServico(servico, id);
@@ -57,6 +62,7 @@ public class ServicoResource {
 		return ResponseEntity.ok().body(servicoSalvo);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
 	public void excluir(@PathVariable Long id) {
 		servicoRepository.deleteById(id);
