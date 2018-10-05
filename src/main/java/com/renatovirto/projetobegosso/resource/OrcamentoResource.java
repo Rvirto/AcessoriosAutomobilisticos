@@ -59,7 +59,7 @@ public class OrcamentoResource {
 	
 	@DeleteMapping("/{id}")
 	public void excluir(@PathVariable Long id) {
-		orcamentoRepository.deleteById(id);
+		orcamentoRepository.delete(id);
 	}
 	
 }

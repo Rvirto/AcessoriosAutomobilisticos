@@ -57,7 +57,7 @@ public class FuncionarioResource {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Funcionario> deletar(@PathVariable Long id) {
-		funcionarioRepository.deleteById(id);
+		funcionarioRepository.delete(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	

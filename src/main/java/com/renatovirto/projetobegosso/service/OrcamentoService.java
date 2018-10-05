@@ -1,10 +1,10 @@
 package com.renatovirto.projetobegosso.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.renatovirto.projetobegosso.model.Orcamento;
@@ -24,10 +24,11 @@ public class OrcamentoService {
 	private OrcamentoRepository orcamentoRepository;
 	
 	public Orcamento buscar(Long id) throws ObjectNotFoundException {
-		Optional<Orcamento> orcamento = orcamentoRepository.findById(id);
-		
-		return orcamento.orElseThrow(() -> new ObjectNotFoundException(
-				"Orcamento não encontrado! Id: " + id + ", Tipo: " + ObjectNotFoundException.class.getName()));
+		Orcamento orcamento = orcamentoRepository.findOne(id);
+		if (orcamento == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return orcamento;
 	}
 	
 	public Orcamento atualizarOrcamento(Orcamento orcamento, Long id) throws ObjectNotFoundException {
@@ -45,9 +46,11 @@ public class OrcamentoService {
 		
 		for (Produto produto : produtos) {
 			Long id = produto.getId();
-			Optional<Produto> produtoRetornado = produtoRepository.findById(id);
-			produto = produtoRetornado.orElseThrow(() -> new ObjectNotFoundException(
-					"Produto não foi encontrado!"));
+			Produto produtoRetornado = produtoRepository.findOne(id);
+			if (produtoRetornado == null) {
+				throw new EmptyResultDataAccessException(1);
+			}
+			produto = produtoRetornado;
 			totalOrcamento+=produto.getPrecoVenda();
 			totalOrcamento+=produto.getServico().getValor();
 		}

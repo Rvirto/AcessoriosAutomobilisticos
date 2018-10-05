@@ -64,6 +64,6 @@ public class ProdutoResource {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
 	public void deletar(@PathVariable Long id) {
-		produtoRepository.deleteById(id);
+		produtoRepository.delete(id);
 	}
 }

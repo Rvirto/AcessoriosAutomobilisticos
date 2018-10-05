@@ -1,6 +1,8 @@
 package com.renatovirto.projetobegosso.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +24,11 @@ public class Cliente {
 	private String cidade;
 	private String rg;
 	private String cpf;
+	private String senha;
 	
+	@Enumerated(EnumType.STRING)
+	private TipoPermissao tipoPermissao;
+
 	@Size(max=2, min=2)
 	private String uf;
 	
@@ -33,6 +39,10 @@ public class Cliente {
 	private String telefone;
 	private String email;
 	
+	
+	public Cliente() {
+		this.tipoPermissao = TipoPermissao.COMUM;
+	}
 	
 	@Override
 	public int hashCode() {
@@ -130,4 +140,18 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	public TipoPermissao getTipoPermissao() {
+		return tipoPermissao;
+	}
+	public void setTipoPermissao(TipoPermissao tipoPermissao) {
+		this.tipoPermissao = tipoPermissao;
+	}
+	
+	
 }

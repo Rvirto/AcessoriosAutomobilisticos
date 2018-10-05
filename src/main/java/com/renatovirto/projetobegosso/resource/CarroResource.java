@@ -66,6 +66,6 @@ public class CarroResource {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long id) {
-		carroRepository.deleteById(id);
+		carroRepository.delete(id);
 	}
 }

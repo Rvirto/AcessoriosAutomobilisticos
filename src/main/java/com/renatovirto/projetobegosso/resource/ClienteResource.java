@@ -57,7 +57,7 @@ public class ClienteResource {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long id) {
-		clienteRepository.deleteById(id);
+		clienteRepository.delete(id);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")

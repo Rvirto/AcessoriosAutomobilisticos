@@ -20,6 +20,8 @@ public class Produto {
 	
 	private String produto;
 	
+	private String descricao;
+
 	@Column(name = "preco_compra")
 	private Double precoCompra;
 	
@@ -126,6 +128,14 @@ public class Produto {
 
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 	
 	

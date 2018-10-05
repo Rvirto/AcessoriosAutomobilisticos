@@ -1,9 +1,8 @@
 package com.renatovirto.projetobegosso.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.renatovirto.projetobegosso.model.Carro;
@@ -18,10 +17,12 @@ public class CarroService {
 	private CarroRepository carroRepository;
 	
 	public Carro buscar(Long id) throws ObjectNotFoundException {
-		Optional<Carro> carro = carroRepository.findById(id);
+		Carro carro = carroRepository.findOne(id);
 		
-		return carro.orElseThrow(() -> new ObjectNotFoundException(
-				"Carro não encontrado! Id: " + id + ", Tipo: " + Carro.class.getName()));
+		if (carro == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return carro;
 	}
 	
 	public Carro atualizarCarro(Carro carro, Long id) throws ObjectNotFoundException {

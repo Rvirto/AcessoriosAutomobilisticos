@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.renatovirto.projetobegosso.model.Carrinho;
-import com.renatovirto.projetobegosso.model.Produto;
 import com.renatovirto.projetobegosso.repository.CarrinhoRepository;
 import com.renatovirto.projetobegosso.service.CarrinhoService;
 
@@ -43,8 +42,8 @@ public class CarrinhoResource {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping
-	public ResponseEntity<Carrinho> adicionar(@Valid @RequestBody Produto produto) {
-		carrinhoService.adicionarProduto(produto);
+	public ResponseEntity<Carrinho> adicionar(@Valid @RequestBody Carrinho carrinho) {
+		carrinhoRepository.save(carrinho);
 		return ResponseEntity.ok().build();
 	}
 
@@ -61,7 +60,7 @@ public class CarrinhoResource {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long id) {
-		carrinhoRepository.deleteById(id);
+		carrinhoRepository.delete(id);
 
 	}
 

@@ -1,9 +1,8 @@
 package com.renatovirto.projetobegosso.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.renatovirto.projetobegosso.model.Funcionario;
@@ -18,9 +17,11 @@ public class FuncionarioService {
 	private FuncionarioRepository funcionarioRepository;
 	
 	public Funcionario buscar(Long id) throws ObjectNotFoundException {
-		Optional<Funcionario> funcionario = funcionarioRepository.findById(id);
-		return funcionario.orElseThrow(() -> new ObjectNotFoundException(
-				"Funcionário não encontrado! Id: " + id + ", Tipo: " + Funcionario.class.getName()));
+		Funcionario funcionario = funcionarioRepository.findOne(id);
+		if ( funcionario == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return funcionario;
 	}
 	
 	public Funcionario atualizarFuncionario(Funcionario funcionario, Long id) throws ObjectNotFoundException {

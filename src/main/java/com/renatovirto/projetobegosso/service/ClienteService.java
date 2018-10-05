@@ -1,9 +1,8 @@
 package com.renatovirto.projetobegosso.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.renatovirto.projetobegosso.model.Cliente;
@@ -18,15 +17,16 @@ public class ClienteService {
 	private ClienteRepository clienteRepository;
 	
 	public Cliente buscarPeloId(Long id) throws ObjectNotFoundException {
-		Optional<Cliente> cliente = clienteRepository.findById(id);
+		Cliente cliente = clienteRepository.findOne(id);
 		
-		return cliente.orElseThrow(() -> new ObjectNotFoundException(
-				"Cliente não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+		if(cliente == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return cliente;
 	}
 	
 	public Cliente atualizarCliente(Cliente cliente, Long id) throws ObjectNotFoundException {
 		Cliente clienteBuscado = buscarPeloId(id);
-		System.out.println(clienteBuscado.getNome());
 		BeanUtils.copyProperties(cliente, clienteBuscado, "id");
 		return clienteRepository.save(clienteBuscado); 
 	}

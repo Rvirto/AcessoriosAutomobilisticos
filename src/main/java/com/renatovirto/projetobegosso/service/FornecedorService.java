@@ -1,9 +1,8 @@
 package com.renatovirto.projetobegosso.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.renatovirto.projetobegosso.model.Fornecedor;
@@ -18,10 +17,12 @@ public class FornecedorService {
 	private FornecedorRepository fornecedorRepository;
 	
 	public Fornecedor buscar(Long id) throws ObjectNotFoundException {
-		Optional<Fornecedor> fornecedor = fornecedorRepository.findById(id);
+		Fornecedor fornecedor = fornecedorRepository.findOne(id);
 		
-		return fornecedor.orElseThrow(() -> new ObjectNotFoundException(
-				"Fornecedor não encontrado! Id: " + id + ", Tipo: " + Fornecedor.class.getName()));
+		if (fornecedor == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return fornecedor;
 	}
 	
 	public Fornecedor atualizarFornecedor(Fornecedor fornecedor, Long id) throws ObjectNotFoundException {

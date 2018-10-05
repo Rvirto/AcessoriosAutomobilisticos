@@ -1,11 +1,18 @@
-package com.renatovirto.projetobegosso.model;
+	package com.renatovirto.projetobegosso.model;
 
-import javax.persistence.Column;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "carrinho")
@@ -15,19 +22,18 @@ public class Carrinho {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "id_produto")
-	private Long idProduto;
-
-	private String produto;
-
-	private String imagem;
-
-	private Double valor;
-
-	private Double quantidade;
-
-	@Column(name = "id_servico")
-	private Long idServico;
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="id_cliente")
+	private Cliente cliente;
+	
+	@NotNull
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name="carrinho_produtos",
+			joinColumns = @JoinColumn(name = "carrinho_id"),
+			inverseJoinColumns = @JoinColumn(name = "produto_id"))
+	private List<Produto> produtos;
 
 	@Override
 	public int hashCode() {
@@ -62,52 +68,20 @@ public class Carrinho {
 		this.id = id;
 	}
 
-	public Long getIdProduto() {
-		return idProduto;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setIdProduto(Long idProduto) {
-		this.idProduto = idProduto;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public String getProduto() {
-		return produto;
+	public List<Produto> getProdutos() {
+		return produtos;
 	}
 
-	public void setProduto(String produto) {
-		this.produto = produto;
-	}
-
-	public String getImagem() {
-		return imagem;
-	}
-
-	public void setImagem(String imagem) {
-		this.imagem = imagem;
-	}
-
-	public Double getValor() {
-		return valor;
-	}
-
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
-	public Double getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Double quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public Long getIdServico() {
-		return idServico;
-	}
-
-	public void setIdServico(Long idServico) {
-		this.idServico = idServico;
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 	
 	

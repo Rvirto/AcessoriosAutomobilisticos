@@ -65,6 +65,6 @@ public class ServicoResource {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
 	public void excluir(@PathVariable Long id) {
-		servicoRepository.deleteById(id);
+		servicoRepository.delete(id);
 	}
 }
