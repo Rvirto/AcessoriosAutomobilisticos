@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,13 +32,11 @@ public class FuncionarioResource {
 	@Autowired
 	private FuncionarioService funcionarioService;
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping
 	public List<Funcionario> listar() {
 		return funcionarioRepository.findAll();
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping
 	public ResponseEntity<Funcionario> adicionar(@Valid @RequestBody Funcionario funcionario) {
 		
@@ -48,20 +45,17 @@ public class FuncionarioResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioSalvo);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/{id}")
 	public Funcionario buscarPeloCodigo(@PathVariable Long id) throws ObjectNotFoundException {
 		return funcionarioService.buscar(id);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Funcionario> deletar(@PathVariable Long id) {
 		funcionarioRepository.delete(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/{id}")
 	public ResponseEntity<Funcionario> atualizar(@Valid @RequestBody Funcionario funcionario, @PathVariable Long id) throws ObjectNotFoundException {
 		Funcionario funcionarioSalvo = funcionarioService.atualizarFuncionario(funcionario, id);

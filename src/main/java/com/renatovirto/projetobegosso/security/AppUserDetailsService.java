@@ -29,7 +29,7 @@ public class AppUserDetailsService implements UserDetailsService {
 		if ( cliente == null) {
 			throw new EmptyResultDataAccessException(1);
 		}
-		return new org.springframework.security.core.userdetails.User(email, cliente.getSenha(), getPermissao(cliente) );
+		return new UsuarioSistema(cliente, getPermissao(cliente));
 	}
 
 	private Collection<? extends GrantedAuthority> getPermissao(Cliente cliente) {
