@@ -38,8 +38,6 @@ public class Produto {
 	@JoinColumn(name = "id_servico")
 	private Servico servico;
 	
-	private String imagem;
-	
 
 	@Override
 	public int hashCode() {
@@ -120,14 +118,6 @@ public class Produto {
 
 	public void setServico(Servico servico) {
 		this.servico = servico;
-	}
-
-	public String getImagem() {
-		return imagem;
-	}
-
-	public void setImagem(String imagem) {
-		this.imagem = imagem;
 	}
 
 	public String getDescricao() {

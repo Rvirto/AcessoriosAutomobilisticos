@@ -34,6 +34,14 @@ public class Carrinho {
 			joinColumns = @JoinColumn(name = "carrinho_id"),
 			inverseJoinColumns = @JoinColumn(name = "produto_id"))
 	private List<Produto> produtos;
+	
+	private String status;
+	
+	
+
+	public Carrinho() {
+		this.status = "A";
+	}
 
 	@Override
 	public int hashCode() {
@@ -82,6 +90,14 @@ public class Carrinho {
 
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

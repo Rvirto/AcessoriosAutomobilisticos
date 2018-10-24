@@ -21,7 +21,8 @@ public class ResourceSeverConfig extends ResourceServerConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	private static final String[] PUBLIC_MATCHERS_GET = {
-			"/produtos/**"
+			"/produtos/**",
+			"/imagens/**"
 	};
 	
 	@Override

@@ -30,7 +30,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		.secret("virto")
 		.scopes("read", "write")
 		.authorizedGrantTypes("password")
-		.accessTokenValiditySeconds(1800);
+		.accessTokenValiditySeconds(3600);
 	}
 	
 	@Override
