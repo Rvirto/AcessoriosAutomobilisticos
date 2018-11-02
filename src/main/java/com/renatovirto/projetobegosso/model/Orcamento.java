@@ -30,7 +30,7 @@ public class Orcamento {
 			name="orcamentos_produtos",
 			joinColumns = @JoinColumn(name = "orcamento_id"),
 			inverseJoinColumns = @JoinColumn(name = "produto_id"))
-	private List<Produto> produtos;
+	private List<ProdutoCarrinho> produtosCarrinho;
 	
 	@NotNull
 	@ManyToOne
@@ -77,12 +77,12 @@ public class Orcamento {
 		this.id = id;
 	}
 
-	public List<Produto> getProdutos() {
-		return produtos;
+	public List<ProdutoCarrinho> getProdutos() {
+		return produtosCarrinho;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setProdutos(List<ProdutoCarrinho> produtos) {
+		this.produtosCarrinho = produtos;
 	}
 
 	public Cliente getCliente() {

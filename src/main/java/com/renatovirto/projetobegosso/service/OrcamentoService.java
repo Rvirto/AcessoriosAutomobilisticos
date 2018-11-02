@@ -8,20 +8,20 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.renatovirto.projetobegosso.model.Orcamento;
-import com.renatovirto.projetobegosso.model.Produto;
+import com.renatovirto.projetobegosso.model.ProdutoCarrinho;
 import com.renatovirto.projetobegosso.repository.OrcamentoRepository;
-import com.renatovirto.projetobegosso.repository.ProdutoRepository;
+import com.renatovirto.projetobegosso.repository.ProdutoCarrinhoRepository;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
 @Service
 public class OrcamentoService {
-
-	@Autowired
-	private ProdutoRepository produtoRepository;
 	
 	@Autowired
 	private OrcamentoRepository orcamentoRepository;
+	
+	@Autowired
+	private ProdutoCarrinhoRepository produtoCarrinhoRepository;
 	
 	public Orcamento buscar(Long id) throws ObjectNotFoundException {
 		Orcamento orcamento = orcamentoRepository.findOne(id);
@@ -39,20 +39,20 @@ public class OrcamentoService {
 	
 	public Orcamento calcularTotalProduto(Orcamento orcamento) throws ObjectNotFoundException {
 		
-		List<Produto> produtos = orcamento.getProdutos();
+		List<ProdutoCarrinho> produtoscarrinho = orcamento.getProdutos();
 		
 		Double totalOrcamento = 0.0;
 		
 		
-		for (Produto produto : produtos) {
+		for (ProdutoCarrinho produto : produtoscarrinho) {
 			Long id = produto.getId();
-			Produto produtoRetornado = produtoRepository.findOne(id);
+			ProdutoCarrinho produtoRetornado = produtoCarrinhoRepository.findOne(id);
 			if (produtoRetornado == null) {
 				throw new EmptyResultDataAccessException(1);
 			}
 			produto = produtoRetornado;
-			totalOrcamento+=produto.getPrecoVenda();
-			totalOrcamento+=produto.getServico().getValor();
+			totalOrcamento+=produto.getValorVenda();
+			totalOrcamento+=produto.getProduto().getServico().getValor();
 		}
 		orcamento.setValorTotal(totalOrcamento);
 		

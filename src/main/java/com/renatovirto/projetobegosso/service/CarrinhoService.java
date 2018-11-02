@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.renatovirto.projetobegosso.model.Carrinho;
 import com.renatovirto.projetobegosso.model.Cliente;
 import com.renatovirto.projetobegosso.model.Produto;
+import com.renatovirto.projetobegosso.model.ProdutoCarrinho;
 import com.renatovirto.projetobegosso.repository.CarrinhoRepository;
+import com.renatovirto.projetobegosso.repository.ProdutoCarrinhoRepository;
 import com.renatovirto.projetobegosso.repository.ProdutoRepository;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -26,6 +28,9 @@ public class CarrinhoService {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private ProdutoCarrinhoRepository produtoCarrinhoRepository;
 
 	public Carrinho buscar(Long id) throws ObjectNotFoundException {
 		Carrinho carro = carrinhoRepository.findOne(id);
@@ -41,11 +46,17 @@ public class CarrinhoService {
 		
 		Produto produtoBuscado = produtoRepository.findOne(idProduto);
 		
-		List<Produto> produtos = carrinhoBuscado.getProdutos();
+		List<ProdutoCarrinho> produtosCarrinho = carrinhoBuscado.getProdutoCarrinho();
 		
-		produtos.remove(produtoBuscado);
-		
-		carrinhoBuscado.setProdutos(produtos);
+		for (ProdutoCarrinho produtoCarrinho : produtosCarrinho) {
+			System.out.println(produtoCarrinho.getValorVenda());
+			if (produtoCarrinho.getProduto().getId() == produtoBuscado.getId()) {
+				produtosCarrinho.remove(produtoCarrinho);
+				produtoCarrinhoRepository.delete(produtoCarrinho);
+				break;
+			}
+		}	
+		carrinhoBuscado.setProdutoCarrinho(produtosCarrinho);
 		
 		carrinhoRepository.save(carrinhoBuscado);
 	}
@@ -59,19 +70,25 @@ public class CarrinhoService {
 	public Carrinho adicionarNoCarrinho(Long id, Produto produto) {
 		Cliente cliente = new Cliente();
 		cliente.setId(id);
-		
-		List<Produto> produtos = new ArrayList<Produto>();
+		List<ProdutoCarrinho> produtos = new ArrayList<ProdutoCarrinho>();
 		Carrinho carrinho = carrinhoRepository.findByClienteAndStatus(cliente, "A");
+		ProdutoCarrinho produtoCarrinho = new ProdutoCarrinho();
 
+		produtoCarrinho.setProduto(produto);
+		produtoCarrinho.setQuantidade(produto.getQuantidade());
+		produtoCarrinho.setValorVenda(produto.getPrecoVenda());
+		
+		produtoCarrinhoRepository.save(produtoCarrinho);
+		
 		if (carrinho != null) {
-			produtos = carrinho.getProdutos();
-			produtos.add(produto);
-			carrinho.setProdutos(produtos);
+			produtos = carrinho.getProdutoCarrinho();
+			produtos.add(produtoCarrinho);
+			carrinho.setProdutoCarrinho(produtos);
 		} else {
 			carrinho = new Carrinho();
 			carrinho.setCliente(cliente);
-			produtos.add(produto);
-			carrinho.setProdutos(produtos);
+			produtos.add(produtoCarrinho);
+			carrinho.setProdutoCarrinho(produtos);
 		}
 		
 		return carrinhoRepository.save(carrinho);

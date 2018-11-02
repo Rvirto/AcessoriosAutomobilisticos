@@ -32,8 +32,8 @@ public class Carrinho {
 	@JoinTable(
 			name="carrinho_produtos",
 			joinColumns = @JoinColumn(name = "carrinho_id"),
-			inverseJoinColumns = @JoinColumn(name = "produto_id"))
-	private List<Produto> produtos;
+			inverseJoinColumns = @JoinColumn(name = "produto_carrinho_id"))
+	private List<ProdutoCarrinho> produtoCarrinho;
 	
 	private String status;
 	
@@ -84,20 +84,20 @@ public class Carrinho {
 		this.cliente = cliente;
 	}
 
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
-	}
-
 	public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public List<ProdutoCarrinho> getProdutoCarrinho() {
+		return produtoCarrinho;
+	}
+
+	public void setProdutoCarrinho(List<ProdutoCarrinho> produtoCarrinho) {
+		this.produtoCarrinho = produtoCarrinho;
 	}
 	
 	
