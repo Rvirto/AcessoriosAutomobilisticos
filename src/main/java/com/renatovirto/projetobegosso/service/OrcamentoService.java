@@ -1,5 +1,6 @@
 package com.renatovirto.projetobegosso.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -7,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.renatovirto.projetobegosso.model.Carrinho;
+import com.renatovirto.projetobegosso.model.Cliente;
 import com.renatovirto.projetobegosso.model.Orcamento;
+import com.renatovirto.projetobegosso.model.Produto;
 import com.renatovirto.projetobegosso.model.ProdutoCarrinho;
+import com.renatovirto.projetobegosso.repository.CarrinhoRepository;
+import com.renatovirto.projetobegosso.repository.ClienteRepository;
 import com.renatovirto.projetobegosso.repository.OrcamentoRepository;
-import com.renatovirto.projetobegosso.repository.ProdutoCarrinhoRepository;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
@@ -21,7 +26,10 @@ public class OrcamentoService {
 	private OrcamentoRepository orcamentoRepository;
 	
 	@Autowired
-	private ProdutoCarrinhoRepository produtoCarrinhoRepository;
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private CarrinhoRepository carrinhoRepository;
 	
 	public Orcamento buscar(Long id) throws ObjectNotFoundException {
 		Orcamento orcamento = orcamentoRepository.findOne(id);
@@ -37,25 +45,40 @@ public class OrcamentoService {
 		return orcamentoRepository.save(orcamentoBuscado);
 	}
 	
-	public Orcamento calcularTotalProduto(Orcamento orcamento) throws ObjectNotFoundException {
+	public Orcamento calcularTotalProduto(List<ProdutoCarrinho> produtoscarrinho, 
+			Long idCliente, Long idCarrinho) throws ObjectNotFoundException {
+		Cliente clienteBuscado = clienteRepository.findOne(idCliente);
+		Carrinho carrinhoBuscado = carrinhoRepository.findOne(idCarrinho);
 		
-		List<ProdutoCarrinho> produtoscarrinho = orcamento.getProdutos();
+		carrinhoBuscado.setStatus("F");
+		carrinhoRepository.save(carrinhoBuscado);
 		
+		List<Produto> produtos = new ArrayList<>();
 		Double totalOrcamento = 0.0;
 		
-		
 		for (ProdutoCarrinho produto : produtoscarrinho) {
-			Long id = produto.getId();
-			ProdutoCarrinho produtoRetornado = produtoCarrinhoRepository.findOne(id);
-			if (produtoRetornado == null) {
-				throw new EmptyResultDataAccessException(1);
-			}
-			produto = produtoRetornado;
 			totalOrcamento+=produto.getValorVenda();
-			totalOrcamento+=produto.getProduto().getServico().getValor();
+			totalOrcamento+=produto.getProduto().getServico().getValor()*produto.getQuantidade();
+			produtos.add(produto.getProduto());
 		}
+		Orcamento orcamento = new Orcamento();
 		orcamento.setValorTotal(totalOrcamento);
+		orcamento.setCliente(clienteBuscado);
+		orcamento.setDesconto(0.0);
+		orcamento.setProdutos(produtos);
 		
-		return orcamento;
+		return orcamentoRepository.save(orcamento);
+	}
+	
+	public List<Orcamento> buscarMeusOrcamentos(Long id) {
+		Cliente clienteBuscado = clienteRepository.findOne(id);
+		
+		List<Orcamento> orcamentoBuscado = orcamentoRepository.findByCliente(clienteBuscado);
+		
+		if (orcamentoBuscado == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		
+		return orcamentoBuscado;
 	}
 }

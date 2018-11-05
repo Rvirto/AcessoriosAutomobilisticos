@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.renatovirto.projetobegosso.model.Orcamento;
+import com.renatovirto.projetobegosso.model.ProdutoCarrinho;
 import com.renatovirto.projetobegosso.repository.OrcamentoRepository;
 import com.renatovirto.projetobegosso.service.OrcamentoService;
 
@@ -42,10 +43,12 @@ public class OrcamentoResource {
 		return orcamentoService.buscar(id);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Orcamento> adicionar(@Valid @RequestBody Orcamento orcamento) throws ObjectNotFoundException {
-		Orcamento orcamentoSalvo = orcamentoRepository.save(
-				orcamentoService.calcularTotalProduto(orcamento));
+	@PostMapping("/{idCliente}/{idCarrinho}")
+	public ResponseEntity<Orcamento> adicionar(@Valid @RequestBody List<ProdutoCarrinho> produtoscarrinho,
+			@PathVariable Long idCliente, @PathVariable Long idCarrinho)
+			throws ObjectNotFoundException {
+		Orcamento orcamentoSalvo = orcamentoService.calcularTotalProduto
+				(produtoscarrinho, idCliente, idCarrinho);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(orcamentoSalvo);
 	}
@@ -62,4 +65,8 @@ public class OrcamentoResource {
 		orcamentoRepository.delete(id);
 	}
 	
+	@GetMapping("/meusOrcamentos/{idCliente}")
+	public List<Orcamento> meusOrcamentos(@PathVariable Long idCliente) {
+		return orcamentoService.buscarMeusOrcamentos(idCliente);
+	}
 }
